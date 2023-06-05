@@ -11,4 +11,5 @@ class AppRoute {
   static const String produitAView = "/produitAView";
   static const String produitAAdd = "/produitAAdd";
   static const String produitAEdit = "/produitAEdit";
+  static const String enregistrerCommande = "/enregistrerCommande";
 }

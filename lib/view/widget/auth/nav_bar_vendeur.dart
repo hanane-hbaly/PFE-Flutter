@@ -1,10 +1,12 @@
 //import 'dart:js_util';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_pfe/core/constant/routes.dart';
 //import 'package:my_pfe/view/screen/auth/logoauth.dart';
 
-class navBarVendeur extends StatelessWidget {
-  const navBarVendeur({super.key});
+class NavBarVendeur extends StatelessWidget {
+  const NavBarVendeur({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,9 @@ class navBarVendeur extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.shopping_cart),
           title: const Text("Enregistrer commande"),
-          onTap: () {},
+          onTap: () {
+            Get.toNamed(AppRoute.enregistrerCommande);
+          },
         ),
         ListTile(
           leading: const Icon(Icons.add_box),

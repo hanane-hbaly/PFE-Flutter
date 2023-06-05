@@ -16,6 +16,14 @@ class GetVendeursData {
       "id": id,
       "action": action,
     });
+    //print(response);
+    return response.fold((l) => l, (r) => r);
+  }
+
+  getvedeurbyid(String id) async {
+    var response = await crud.postData(AppLink.getvendeurById, {
+      "idv": id,
+    });
     print(response);
     return response.fold((l) => l, (r) => r);
   }

@@ -4,7 +4,6 @@ import 'package:my_pfe/core/class/statusrequest.dart';
 import 'package:my_pfe/core/constant/routes.dart';
 import 'package:my_pfe/core/function/handilingdata.dart';
 import 'package:my_pfe/data/datasource/remote/login.dart';
-
 import '../../core/serices.dart';
 
 class LoginController extends GetxController {

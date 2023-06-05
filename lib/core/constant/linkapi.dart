@@ -27,4 +27,5 @@ class AppLink {
   static String prodduitD = "$linkServerName/admin/gereProduit/delete.php";
   static String testphp = "$linkServerName/test.php";
   static String imagep = "$linkServerName/upload/produits";
+  static String getAllC = "$linkServerName/vendeur/getAllClient.php";
 }

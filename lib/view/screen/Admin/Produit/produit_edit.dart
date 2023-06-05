@@ -14,7 +14,9 @@ class ProduitEdit extends StatelessWidget {
     Get.put(ProduitEditController());
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Produit edit'),
+          title: const Text('Modifier produit'),
+          shadowColor: const Color.fromARGB(255, 2, 249, 15),
+          backgroundColor: Colors.green[600],
         ),
         body: GetBuilder<ProduitEditController>(
             builder: (controller) => HandlingDataView(
@@ -32,11 +34,41 @@ class ProduitEdit extends StatelessWidget {
                           labeltext: 'produit prix',
                           mycontroller: controller.prixp,
                           iconData: Icons.category),
-                      CustomTextFormGlobal(
-                          hinttext: 'entrer le type',
-                          labeltext: 'produit type',
-                          mycontroller: controller.typep,
-                          iconData: Icons.category),
+                      // CustomTextFormGlobal(
+                      //     hinttext: 'entrer le type',
+                      //     labeltext: 'produit type',
+                      //     mycontroller: controller.typep,
+                      //     iconData: Icons.category),
+                      Column(
+                        children: [
+                          const Text('Type du produit'),
+                          RadioListTile<int>(
+                            title: const Text('5'),
+                            value: 5,
+                            groupValue: controller.selectedType,
+                            onChanged: (value) {
+                              controller.setSelectedType(value!);
+                            },
+                          ),
+                          RadioListTile<int>(
+                            title: const Text('10'),
+                            value: 10,
+                            groupValue: controller.selectedType,
+                            onChanged: (value) {
+                              controller.setSelectedType(value!);
+                            },
+                          ),
+                          RadioListTile<int>(
+                            title: const Text('25'),
+                            value: 25,
+                            groupValue: controller.selectedType,
+                            onChanged: (value) {
+                              controller.setSelectedType(value!);
+                            },
+                          ),
+                        ],
+                      ),
+
                       Container(
                           padding: const EdgeInsets.symmetric(horizontal: 50),
                           child: MaterialButton(
@@ -45,9 +77,17 @@ class ProduitEdit extends StatelessWidget {
                             onPressed: () {
                               controller.chooseImage();
                             },
-                            child: const Text("chose category image"),
+                            child: const Text("choisir une  image"),
                           )),
-                      // if (controller.file != null)
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      if (controller.file != null)
+                        Image.file(
+                          controller.file!,
+                          width: 200,
+                          height: 200,
+                        ),
                       const SizedBox(
                         height: 20,
                       ),

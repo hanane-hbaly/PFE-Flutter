@@ -31,8 +31,8 @@ class ProduitController extends GetxController {
   }
 
   deleteProduit(int id, String imagename) {
-    produitData.delete({"ProduitID:": id, "Imagep": imagename});
-    data.removeWhere((element) => element.ProduitID == id);
+    produitData.delete({"ProduitID": id.toString(), "Imagep": imagename});
+    data.removeWhere((element) => element.ProduitID! == id);
     update();
   }
 

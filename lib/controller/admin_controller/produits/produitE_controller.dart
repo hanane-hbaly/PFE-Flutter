@@ -15,10 +15,11 @@ class ProduitEditController extends GetxController {
   ProduitData produitData = ProduitData(Get.find());
   late TextEditingController nomp;
   late TextEditingController prixp;
-  late TextEditingController typep;
+  //late TextEditingController typep;
   CategoriesModel? categoriesModel;
   File? file;
   StatusRequest? statusRequest = StatusRequest.none;
+  int selectedType = 5;
   chooseImage() async {
     file = await fileUploadGallery();
     update();
@@ -31,7 +32,7 @@ class ProduitEditController extends GetxController {
       "ProduitID": categoriesModel!.ProduitID.toString(),
       "Nomp": nomp.text,
       "Prixp": prixp.text,
-      "Typep": typep.text,
+      "Typep": selectedType.toString(),
       "imageold": categoriesModel!.Imagep!,
     };
     var response = await produitData.edit(data, file);
@@ -55,13 +56,19 @@ class ProduitEditController extends GetxController {
     categoriesModel = Get.arguments['categoriesModel'];
     nomp = TextEditingController();
     prixp = TextEditingController();
-    typep = TextEditingController();
+    //typep = TextEditingController();
 
     nomp.text = categoriesModel!.Nomp!;
     prixp.text = categoriesModel!.Prixp.toString();
-    typep.text = categoriesModel!.Typep.toString();
+    //typep.text = categoriesModel!.Typep.toString();
+    selectedType = categoriesModel!.Typep!;
 
     super.onInit();
+  }
+
+  setSelectedType(int value) {
+    selectedType = value;
+    update();
   }
 
   myback() {

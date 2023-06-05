@@ -7,58 +7,102 @@ import 'package:my_pfe/core/shared/customtextformglobal.dart';
 import '../../../widget/auth/custombuttomauth.dart';
 
 class ProduitAdd extends StatelessWidget {
-  const ProduitAdd({super.key});
+  const ProduitAdd({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Get.put(ProduitAddController());
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Produit add'),
-        ),
-        body: GetBuilder<ProduitAddController>(
-            builder: (controller) => HandlingDataView(
-                  statusRequest: controller.statusRequest!,
-                  widget: Container(
-                    padding: const EdgeInsets.all(20),
-                    child: ListView(children: <Widget>[
-                      CustomTextFormGlobal(
-                          hinttext: 'entrer le nom',
-                          labeltext: 'produit name',
-                          mycontroller: controller.nomp,
-                          iconData: Icons.category),
-                      CustomTextFormGlobal(
-                          hinttext: 'entrer le prix',
-                          labeltext: 'produit prix',
-                          mycontroller: controller.prixp,
-                          iconData: Icons.category),
-                      CustomTextFormGlobal(
-                          hinttext: 'entrer le type',
-                          labeltext: 'produit type',
-                          mycontroller: controller.typep,
-                          iconData: Icons.category),
-                      Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 50),
-                          child: MaterialButton(
-                            color: Colors.green[100],
-                            textColor: Colors.green[800],
-                            onPressed: () {
-                              controller.chooseImage();
-                            },
-                            child: const Text("chose category image"),
-                          )),
-                      // if (controller.file != null)
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomButtomAuth(
-                        text: 'Ajouter',
-                        onPressed: () {
-                          controller.addData();
+      appBar: AppBar(
+        title: const Text('Ajouter un produit'),
+        shadowColor: const Color.fromARGB(255, 2, 249, 15),
+        backgroundColor: Colors.green[600],
+      ),
+      body: GetBuilder<ProduitAddController>(
+        builder: (controller) => HandlingDataView(
+          statusRequest: controller.statusRequest!,
+          widget: Container(
+            padding: const EdgeInsets.all(20),
+            child: ListView(
+              children: <Widget>[
+                CustomTextFormGlobal(
+                    hinttext: 'Entrer le nom',
+                    labeltext: 'Nom du produit',
+                    mycontroller: controller.nomp,
+                    iconData: Icons.category),
+                CustomTextFormGlobal(
+                    hinttext: 'Entrer le prix',
+                    labeltext: 'Prix du produit',
+                    mycontroller: controller.prixp,
+                    iconData: Icons.category),
+                ListTile(
+                  title: const Text('Type du produit'),
+                  subtitle: Column(
+                    children: [
+                      RadioListTile<int>(
+                        title: const Text('5'),
+                        value: 5,
+                        groupValue: controller.selectedType,
+                        onChanged: (value) {
+                          controller.setSelectedType(value!);
                         },
-                      )
-                    ]),
+                      ),
+                      RadioListTile<int>(
+                        title: const Text('10'),
+                        value: 10,
+                        groupValue: controller.selectedType,
+                        onChanged: (value) {
+                          controller.setSelectedType(value!);
+                        },
+                      ),
+                      RadioListTile<int>(
+                        title: const Text('25'),
+                        value: 25,
+                        groupValue: controller.selectedType,
+                        onChanged: (value) {
+                          controller.setSelectedType(value!);
+                        },
+                      ),
+                    ],
                   ),
-                )));
+                ),
+                // CustomTextFormGlobal(
+                //     hinttext: 'Entrer le type',
+                //     labeltext: 'Type du produit',
+                //     mycontroller: controller.typep,
+                //     iconData: Icons
+                //         .category), // ici je veut faire au lieu de CustomTextFormGlobal radio button qui contion 3 des choix 5 10 25 comment je peut faire ca
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 50),
+                  child: MaterialButton(
+                    color: Colors.green[100],
+                    textColor: Colors.green[800],
+                    onPressed: () {
+                      controller.chooseImage();
+                    },
+                    child: const Text('Choisir une image'),
+                  ), // je veut afficher l'image choisi par l'utilisateur comment je peut faire ca
+                ),
+                if (controller.file != null)
+                  Image.file(
+                    controller.file!,
+                    width: 200,
+                    height: 200,
+                  ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomButtomAuth(
+                  text: 'Ajouter',
+                  onPressed: () {
+                    controller.addData();
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

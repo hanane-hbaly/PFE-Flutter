@@ -7,7 +7,7 @@ import 'package:my_pfe/controller/admin_controller/produits/produitV_controller.
 import 'package:my_pfe/core/class/handlingdataview.dart';
 import 'package:my_pfe/core/constant/linkapi.dart';
 import 'package:my_pfe/core/constant/routes.dart';
-// import 'dart:io';
+//  import 'dart:io';
 
 class ProduitAView extends StatelessWidget {
   const ProduitAView({super.key});
@@ -18,7 +18,9 @@ class ProduitAView extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
-          title: const Text('Produits'),
+          title: const Center(child: Text('Produits')),
+          shadowColor: const Color.fromARGB(255, 2, 249, 15),
+          backgroundColor: Colors.green[600],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -58,6 +60,8 @@ class ProduitAView extends StatelessWidget {
                                 child: ListTile(
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       IconButton(
                                         icon: const Icon(Icons.edit),
@@ -70,17 +74,19 @@ class ProduitAView extends StatelessWidget {
                                         icon: const Icon(Icons.delete),
                                         onPressed: () {
                                           Get.defaultDialog(
-                                              title: "Attention",
-                                              middleText: "are you sure",
-                                              onCancel: () {},
-                                              onConfirm: () {
-                                                controller.deleteProduit(
-                                                    controller
-                                                        .data[index].ProduitID!,
-                                                    controller
-                                                        .data[index].Imagep!);
-                                                Get.back();
-                                              });
+                                            title: "Confirmation",
+                                            middleText:
+                                                "Êtes-vous sûr de vouloir supprimer ce produit ?",
+                                            onCancel: () {},
+                                            onConfirm: () {
+                                              controller.deleteProduit(
+                                                controller
+                                                    .data[index].ProduitID!,
+                                                controller.data[index].Imagep!,
+                                              );
+                                              Get.back();
+                                            },
+                                          );
                                         },
                                       ),
                                     ],

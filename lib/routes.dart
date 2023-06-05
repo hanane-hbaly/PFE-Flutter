@@ -9,6 +9,7 @@ import 'package:my_pfe/view/screen/Admin/bloquer_vendeur.dart';
 import 'package:my_pfe/view/screen/Admin/commandeAView.dart';
 import 'package:my_pfe/view/screen/Admin/consulter_planningA_view.dart';
 import 'package:my_pfe/view/screen/Admin/homerespo.dart';
+import 'package:my_pfe/view/screen/Vendeur/enregistreCommande.dart';
 import 'package:my_pfe/view/screen/auth/login.dart';
 import 'package:my_pfe/view/screen/Vendeur/homeVendeur.dart';
 
@@ -26,4 +27,7 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.produitAView, page: () => const ProduitAView()),
   GetPage(name: AppRoute.produitAAdd, page: () => const ProduitAdd()),
   GetPage(name: AppRoute.produitAEdit, page: () => const ProduitEdit()),
+  GetPage(
+      name: AppRoute.enregistrerCommande,
+      page: () => const EnregistrerCommande()),
 ];

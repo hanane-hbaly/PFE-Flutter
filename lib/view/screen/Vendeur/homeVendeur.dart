@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../controller/admin_controller/home_controller.dart';
+import 'package:my_pfe/controller/vendeur_controller/home_controllerV.dart';
+import '../../../core/class/handlingdataview.dart';
 import '../../widget/auth/nav_bar_vendeur.dart';
 
 class HomeVendeur extends StatelessWidget {
@@ -9,7 +9,7 @@ class HomeVendeur extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeControllerA controller = Get.put(HomeControllerA());
+    Get.put(HomeControllerV());
 
     return Scaffold(
       appBar: AppBar(
@@ -18,12 +18,15 @@ class HomeVendeur extends StatelessWidget {
       ),
       // backgroundColor: Colors.compexDrawerCanvasColor,
       drawerScrimColor: Colors.transparent,
-      body: Container(
-        child: Center(
-          child: Text("${controller.id}"),
+      body: GetBuilder<HomeControllerV>(
+        builder: (controller) => HandlingDataView(
+          statusRequest: controller.statusRequest,
+          widget: Center(
+            child: Text("${controller.vendeur['Prenomv']}"),
+          ),
         ),
       ),
-      drawer: const navBarVendeur(),
+      drawer: const NavBarVendeur(),
     );
   }
 }

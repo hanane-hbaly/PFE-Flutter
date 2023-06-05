@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:my_pfe/controller/admin_controller/produits/produitV_controller.dart';
 import 'package:my_pfe/core/class/statusrequest.dart';
 import 'package:my_pfe/core/constant/routes.dart';
-//import 'package:my_pfe/core/constant/routes.dart';
 import 'package:my_pfe/core/function/uploadfile.dart';
 import '../../../core/function/handilingdata.dart';
 import '../../../data/datasource/remote/adminData/produitData.dart';
@@ -14,42 +13,76 @@ class ProduitAddController extends GetxController {
   ProduitData produitData = ProduitData(Get.find());
   late TextEditingController nomp;
   late TextEditingController prixp;
-  late TextEditingController typep;
+  late int selectedType = 5; // Valeur par défaut pour le bouton radio
   File? file;
   StatusRequest? statusRequest = StatusRequest.none;
+
   chooseImage() async {
     file = await fileUploadGallery();
     update();
   }
 
   addData() async {
-    if (file == null) Get.defaultDialog(title: "warnnig");
+    if (file == null) {
+      Get.defaultDialog(
+          title: "Avertissement",
+          content: const Text("Veuillez choisir une image ."));
+      return;
+    }
+
+    if (nomp.text.isEmpty || prixp.text.isEmpty) {
+      Get.defaultDialog(
+          title: "Avertissement",
+          content: const Text("Veuillez remplir tous les champs."));
+      return;
+    }
+
     statusRequest = StatusRequest.loading;
     update();
-    // if (file == null) Get.snackbar("Warning", "please Choose Image");
 
     Map data = {
       "Nomp": nomp.text,
       "Prixp": prixp.text,
-      "Typep": typep.text,
+      "Typep": selectedType.toString(),
     };
-    var response = await produitData.add(data, file!);
-    statusRequest = handlingData(response);
-    print("********************** $response");
 
-    if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        nomp.clear();
-        prixp.clear();
-        typep.clear();
-        file!.delete();
-        //Get.offNamed(AppRoute.produitAView);
-        ProduitController pc = Get.find();
-        pc.getData();
-      } else {
-        statusRequest = StatusRequest.failure;
+    var response = await produitData.add(data, file!);
+    try {
+      statusRequest = handlingData(response);
+      print("********************** $response");
+
+      if (StatusRequest.success == statusRequest) {
+        if (response['status'] == "success") {
+          nomp.clear();
+          prixp.clear();
+          selectedType = 5;
+
+          if (file != null) {
+            try {
+              await file!.delete();
+              print('Fichier supprimé avec succès');
+            } catch (e) {
+              print('Erreur lors de la suppression du fichier : $e');
+            }
+          }
+
+          update();
+          ProduitController pc = Get.find();
+          pc.getData();
+        } else {
+          statusRequest = StatusRequest.failure;
+        }
       }
+    } catch (e) {
+      statusRequest = StatusRequest.failure;
+      print("Erreur lors de la mise à jour du contrôleur : $e");
     }
+
+    update();
+  }
+
+  void setSelectedType(int value) {
+    selectedType = value;
     update();
   }
 
@@ -57,9 +90,6 @@ class ProduitAddController extends GetxController {
   void onInit() {
     nomp = TextEditingController();
     prixp = TextEditingController();
-    typep = TextEditingController();
-    //addData();
-    //chooseImage();
     super.onInit();
   }
 
