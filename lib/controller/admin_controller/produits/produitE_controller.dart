@@ -15,6 +15,7 @@ class ProduitEditController extends GetxController {
   ProduitData produitData = ProduitData(Get.find());
   late TextEditingController nomp;
   late TextEditingController prixp;
+  GlobalKey<FormState> formstate = GlobalKey<FormState>();
   //late TextEditingController typep;
   CategoriesModel? categoriesModel;
   File? file;
@@ -26,29 +27,40 @@ class ProduitEditController extends GetxController {
   }
 
   editData() async {
-    statusRequest = StatusRequest.loading;
-    update();
-    Map data = {
-      "ProduitID": categoriesModel!.ProduitID.toString(),
-      "Nomp": nomp.text,
-      "Prixp": prixp.text,
-      "Typep": selectedType.toString(),
-      "imageold": categoriesModel!.Imagep!,
-    };
-    var response = await produitData.edit(data, file);
-    print("***********ProduitEdit $response");
-    statusRequest = handlingData(response);
-
-    if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        Get.offNamed(AppRoute.produitAView);
-        ProduitController pc = Get.find();
-        pc.getData();
-      } else {
-        statusRequest = StatusRequest.failure;
+    if (formstate.currentState!.validate()) {
+      statusRequest = StatusRequest.loading;
+      update();
+      Map data = {
+        "ProduitID": categoriesModel!.ProduitID.toString(),
+        "Nomp": nomp.text,
+        "Prixp": prixp.text,
+        "Typep": selectedType.toString(),
+        "imageold": categoriesModel!.Imagep!,
+      };
+      var response = await produitData.edit(data, file);
+      print("***********ProduitEdit $response");
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+        if (response['status'] == "success") {
+          Get.defaultDialog(
+            title: "succès",
+            content: const Text("Le produit a été modifié avec succès."),
+            confirm: ElevatedButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text("OK"),
+            ),
+          );
+          // Get.offNamed(AppRoute.produitAView);
+          ProduitController pc = Get.find();
+          pc.getData();
+        } else {
+          statusRequest = StatusRequest.failure;
+        }
       }
+      update();
     }
-    update();
   }
 
   @override
@@ -59,7 +71,7 @@ class ProduitEditController extends GetxController {
     //typep = TextEditingController();
 
     nomp.text = categoriesModel!.Nomp!;
-    prixp.text = categoriesModel!.Prixp.toString();
+    prixp.text = categoriesModel!.prixp.toString();
     //typep.text = categoriesModel!.Typep.toString();
     selectedType = categoriesModel!.Typep!;
 

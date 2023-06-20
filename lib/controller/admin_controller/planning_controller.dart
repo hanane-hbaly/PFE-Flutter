@@ -6,18 +6,18 @@
 // import 'package:intl/intl.dart';
 
 // class PlanningController extends GetxController {
-//   PlanningAData planningAData = (PlanningAData(Get.find()));
+//   PlanningAData planningAData = PlanningAData(Get.find());
 //   StatusRequest? statusRequest;
-//   List affectation = [];
+//   List<Map<String, dynamic>> affectation = [];
+//   List<double> dataRowHeights = [];
 
 //   DateTime startDate = DateTime.now();
 //   DateTime endDate = DateTime.now();
+
 //   @override
 //   void onInit() {
 //     super.onInit();
-//     getAffectation();
 //     buildDataRowList();
-
 //     startDate = DateTime.now();
 //     endDate = DateTime.now().add(const Duration(days: 7));
 //   }
@@ -38,6 +38,8 @@
 //     ).then((selectedDate) {
 //       if (selectedDate != null) {
 //         startDate = selectedDate;
+//         endDate = selectedDate;
+//         date = selectedDate;
 //         update();
 //       }
 //     });
@@ -53,75 +55,94 @@
 //       'Vendredi',
 //       'Samedi'
 //     ];
-//     int dayIndex = date.weekday;
-//     return daysOfWeek[dayIndex - 1];
+//     int dayIndex = date.weekday - 1;
+//     return daysOfWeek[dayIndex];
 //   }
+
+//   double nombrecell = 0;
 
 //   List<DataRow> buildDataRowList() {
 //     final List<DataRow> dataRows = [];
 
-//     for (final affectation in affectation) {
-//       final date = DateTime.parse(affectation['Datea']);
+//     // Grouper les affectations par jour
+//     Map<DateTime, List<Map<String, dynamic>>> affectationByDay = {};
+
+//     for (final affectationData in affectation) {
+//       final date = DateTime.parse(affectationData['Datea']);
+
+//       if (!affectationByDay.containsKey(date)) {
+//         affectationByDay[date] = [];
+//         nombrecell++;
+//       }
+
+//       affectationByDay[date]?.add(affectationData);
+//     }
+
+//     // Créer les DataRow pour chaque jour et ses affectations
+//     affectationByDay.forEach((date, affectations) {
 //       final formattedDate1 = DateFormat('yyyy/MM/dd').format(date);
 //       final formattedDate = _getDayOfWeek(date);
 
 //       List<DataCell> dataCells = [
-//         DataCell(Text(" $formattedDate, $formattedDate1 ")),
 //         DataCell(Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
 //           children: [
-//             Padding(
-//               padding: const EdgeInsets.symmetric(vertical: 5.0),
-//               child: Text(affectation['Noms']),
-//             ),
+//             Text(" $formattedDate,"),
+//             Text("  $formattedDate1 "),
 //           ],
 //         )),
-//         DataCell(Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.symmetric(vertical: 5.0),
-//               child: Text(affectation['VendeurNom']),
-//             ),
-//           ],
-//         )),
-//         DataCell(Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.symmetric(vertical: 5.0),
-//               child: Text(affectation['VehiculeID']),
-//             ),
-//           ],
-//         )),
+//         DataCell(
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: affectations
+//                 .map((affectation) => Padding(
+//                       padding: const EdgeInsets.symmetric(vertical: 5.0),
+//                       child: Text(affectation['Noms']),
+//                     ))
+//                 .toList(),
+//           ),
+//         ),
+//         DataCell(
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: affectations
+//                 .map((affectation) => Padding(
+//                       padding: const EdgeInsets.symmetric(vertical: 5.0),
+//                       child: Text(affectation['VendeurNom']),
+//                     ))
+//                 .toList(),
+//           ),
+//         ),
+//         DataCell(
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: affectations
+//                 .map((affectation) => Padding(
+//                       padding: const EdgeInsets.symmetric(vertical: 5.0),
+//                       child: Text(affectation['VehiculeID']),
+//                     ))
+//                 .toList(),
+//           ),
+//         ),
 //       ];
 
+//       dynamic rowHeight = affectations.length * 20.0;
+//       dataRowHeights.add(rowHeight);
+
 //       dataRows.add(DataRow(cells: dataCells));
-//     }
+//     });
+
+//     update();
 
 //     return dataRows;
 //   }
 
-//   // getAffectation() async {
-//   //   statusRequest = StatusRequest.loading;
-//   //   var response = await planningAData.getData(startDate, endDate);
-//   //   statusRequest = handlingData(response);
-//   //   print("********************** $response");
+//   List<double> buildDataRowHeights() {
+//     return dataRowHeights;
+//   }
 
-//   //   if (StatusRequest.success == statusRequest) {
-//   //     if (response['status'] == "success") {
-//   //       affectation.addAll(response['data']);
-//   //     } else {
-//   //       statusRequest = StatusRequest.failure;
-//   //     }
-//   //   }
-//   //   update();
-
-//   // }
-//   getAffectation() async {
+//   void getAffectation() async {
 //     statusRequest = StatusRequest.loading;
 
-//     // Convertir les dates en format texte
 //     final DateFormat formatter = DateFormat('yyyy/MM/dd');
 //     final String startDateText = formatter.format(startDate);
 //     final String endDateText = formatter.format(endDate);
@@ -132,12 +153,13 @@
 
 //     if (StatusRequest.success == statusRequest) {
 //       if (response['status'] == "success") {
-//         affectation.addAll(response['data']);
+//         affectation = List<Map<String, dynamic>>.from(response['data']);
 //       } else {
 //         statusRequest = StatusRequest.failure;
 //       }
 //     }
 //     update();
+//     //buildDataRowList(); // Appeler la méthode
 //   }
 // }
 
@@ -152,18 +174,24 @@ class PlanningController extends GetxController {
   PlanningAData planningAData = PlanningAData(Get.find());
   StatusRequest? statusRequest;
   List<Map<String, dynamic>> affectation = [];
-  //RxList<Map<String, dynamic>> affectation = RxList<Map<String, dynamic>>();
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
+  //List<DataRow> dataRows = [];
+  RxList<DataRow> dataRows = RxList<DataRow>([]);
+  var hasAffectations = false.obs;
+
+  int rowsPerPage = PaginatedDataTable.defaultRowsPerPage;
+  int currentPage = 0;
+  late MyDataTableSource dataTableSource;
 
   @override
   void onInit() {
+    startDate = DateTime.now().subtract((const Duration(days: 7)));
+    endDate = DateTime.now();
+    dataTableSource = MyDataTableSource(this);
+    // buildDataRowList();
     super.onInit();
-
-    buildDataRowList();
-    startDate = DateTime.now();
-    endDate = DateTime.now().add(const Duration(days: 7));
   }
 
   List<DataColumn> columns = const [
@@ -189,21 +217,6 @@ class PlanningController extends GetxController {
     });
   }
 
-  //
-  // void showCalendar(BuildContext context, TextEditingController controller) {
-  //   showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime(2023),
-  //     lastDate: DateTime(2024),
-  //   ).then((selectedDate) {
-  //     if (selectedDate != null) {
-  //       controller.text = DateFormat('yyyy/MM/dd').format(selectedDate);
-  //       // Vous pouvez également stocker la valeur sélectionnée dans une variable d'état si nécessaire
-  //     }
-  //   });
-  // }
-
   String _getDayOfWeek(DateTime date) {
     List<String> daysOfWeek = [
       'Dimanche',
@@ -214,21 +227,24 @@ class PlanningController extends GetxController {
       'Vendredi',
       'Samedi'
     ];
-    int dayIndex = date.weekday;
-    return daysOfWeek[dayIndex - 0];
+    int dayIndex = date.weekday - 1;
+    return daysOfWeek[dayIndex];
   }
 
-  List<DataRow> buildDataRowList() {
-    final List<DataRow> dataRows = [];
+  void buildDataRowList(List<Map<String, dynamic>> affectation) {
+    List<DataRow> newDataRows = [];
+    double nombreCell = 0;
 
     // Grouper les affectations par jour
     Map<DateTime, List<Map<String, dynamic>>> affectationByDay = {};
 
     for (final affectationData in affectation) {
-      final date = DateTime.parse(affectationData['Datea']);
+      final date = DateTime.parse(affectationData['Datea'])
+          .add((const Duration(days: 1)));
 
       if (!affectationByDay.containsKey(date)) {
         affectationByDay[date] = [];
+        nombreCell++;
       }
 
       affectationByDay[date]?.add(affectationData);
@@ -240,190 +256,66 @@ class PlanningController extends GetxController {
       final formattedDate = _getDayOfWeek(date);
 
       List<DataCell> dataCells = [
-        DataCell(Text(" $formattedDate, $formattedDate1 ")),
-        DataCell(Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: affectations
-              .map((affectation) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Text(affectation['Noms']),
-                  ))
-              .toList(),
-        )),
-        DataCell(Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: affectations
-              .map((affectation) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Text(affectation['VendeurNom']),
-                  ))
-              .toList(),
-        )),
-        DataCell(Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: affectations
-              .map((affectation) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Text(affectation['VehiculeID']),
-                  ))
-              .toList(),
-        )),
+        DataCell(
+          SizedBox(
+            height: 100 * nombreCell,
+            child: Column(
+              children: [
+                Text(" $formattedDate, $formattedDate1"),
+                Text(""),
+              ],
+            ),
+          ),
+        ),
+        DataCell(
+          SizedBox(
+            height: 100 * nombreCell,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: affectations
+                  .map((affectation) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(affectation['Noms']),
+                      ))
+                  .toList(),
+            ),
+          ),
+        ),
+        DataCell(
+          SizedBox(
+            height: 100 * nombreCell,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: affectations
+                  .map((affectation) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(affectation['VendeurNom']),
+                      ))
+                  .toList(),
+            ),
+          ),
+        ),
+        DataCell(
+          SizedBox(
+            height: 100 * nombreCell,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: affectations
+                  .map((affectation) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(affectation['VehiculeID']),
+                      ))
+                  .toList(),
+            ),
+          ),
+        ),
       ];
 
-      dataRows.add(DataRow(cells: dataCells));
+      newDataRows.add(DataRow(cells: dataCells));
     });
 
-    update();
-
-    return dataRows;
+    dataRows.value = newDataRows;
   }
-
-  // RxList<DataRow> buildDataRowList() {
-  //   final List<DataRow> dataRows = [];
-
-  //   // Grouper les affectations par jour
-  //   Map<DateTime, List<Map<String, dynamic>>> affectationByDay = {};
-
-  //   for (final affectationData in affectation) {
-  //     final date = DateTime.parse(affectationData['Datea']);
-
-  //     if (!affectationByDay.containsKey(date)) {
-  //       affectationByDay[date] = [];
-  //     }
-
-  //     affectationByDay[date]?.add(affectationData);
-  //   }
-
-  //   affectationByDay.forEach((date, affectations) {
-  //     final formattedDate1 = DateFormat('yyyy/MM/dd').format(date);
-  //     final formattedDate = _getDayOfWeek(date);
-
-  //     List<DataCell> dataCells = [
-  //       DataCell(Text(" $formattedDate, $formattedDate1 ")),
-  //       DataCell(Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: affectations
-  //             .map((affectation) => Padding(
-  //                   padding: const EdgeInsets.symmetric(vertical: 5.0),
-  //                   child: Text(affectation['Noms']),
-  //                 ))
-  //             .toList(),
-  //       )),
-  //       DataCell(Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: affectations
-  //             .map((affectation) => Padding(
-  //                   padding: const EdgeInsets.symmetric(vertical: 5.0),
-  //                   child: Text(affectation['VendeurNom']),
-  //                 ))
-  //             .toList(),
-  //       )),
-  //       DataCell(Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: affectations
-  //             .map((affectation) => Padding(
-  //                   padding: const EdgeInsets.symmetric(vertical: 5.0),
-  //                   child: Text(affectation['VehiculeID']),
-  //                 ))
-  //             .toList(),
-  //       )),
-  //     ];
-
-  //     dataRows.add(DataRow(cells: dataCells));
-  //   });
-
-  //   return dataRows.obs;
-  // }
-
-  // List<DataRow> buildDataRowList() {
-  //   final List<DataRow> dataRows = [];
-
-  //   // Grouper les affectations par jour
-  //   Map<DateTime, List> affectationByDay = {};
-
-  //   for (final affectationData in affectation) {
-  //     final date = DateTime.parse(affectationData['Datea']);
-  //     // final formattedDate1 = DateFormat('yyyy/MM/dd').format(date);
-  //     // final formattedDate = _getDayOfWeek(date);
-
-  //     if (!affectationByDay.containsKey(date)) {
-  //       affectationByDay[date] = [];
-  //     }
-
-  //     affectationByDay[date]?.add(affectation);
-  //   }
-
-  //   // Créer les DataRow pour chaque jour et ses affectations
-  //   affectationByDay.forEach((date, affectations) {
-  //     final formattedDate1 = DateFormat('yyyy/MM/dd').format(date);
-  //     final formattedDate = _getDayOfWeek(date);
-
-  //     List<DataCell> dataCells = [
-  //       DataCell(Text(" $formattedDate, $formattedDate1 ")),
-  //       DataCell(Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: affectations
-  //             .map((affectation) => Padding(
-  //                   padding: const EdgeInsets.symmetric(vertical: 5.0),
-  //                   child: Text(affectation['Noms']),
-  //                 ))
-  //             .toList(),
-  //       )),
-  //       DataCell(Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: affectations
-  //             .map((affectation) => Padding(
-  //                   padding: const EdgeInsets.symmetric(
-  //                       vertical: 5.0), // Espacement vertical
-  //                   child: Text(affectation['VendeurNom']),
-  //                 ))
-  //             .toList(),
-  //       )),
-  //       DataCell(Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: affectations
-  //             .map((affectation) => Padding(
-  //                   padding: const EdgeInsets.symmetric(
-  //                       vertical: 5.0), // Espacement vertical
-  //                   child: Text(affectation['VehiculeID']),
-  //                 ))
-  //             .toList(),
-  //       )),
-  //     ];
-
-  //     dataRows.add(DataRow(cells: dataCells));
-  //   });
-
-  //   return dataRows;
-  // }
-
-  // DataCell(Column(
-  //   crossAxisAlignment: CrossAxisAlignment.start,
-  //   children: [
-  //     Padding(
-  //       padding: const EdgeInsets.symmetric(vertical: 5.0),
-  //       child: Text(affectationData['Noms']),
-  //     ),
-  //   ],
-  // )),
-  // DataCell(Column(
-  //   crossAxisAlignment: CrossAxisAlignment.start,
-  //   children: [
-  //     Padding(
-  //       padding: const EdgeInsets.symmetric(vertical: 5.0),
-  //       child: Text(affectationData['VendeurNom']),
-  //     ),
-  //   ],
-  // )),
-  // DataCell(Column(
-  //   crossAxisAlignment: CrossAxisAlignment.start,
-  //   children: [
-  //     Padding(
-  //       padding: const EdgeInsets.symmetric(vertical: 5.0),
-  //       child: Text(affectationData['VehiculeID']),
-  //     ),
-  //   ],
-  // )),
 
   void getAffectation() async {
     statusRequest = StatusRequest.loading;
@@ -431,7 +323,7 @@ class PlanningController extends GetxController {
     final DateFormat formatter = DateFormat('yyyy/MM/dd');
     final String startDateText = formatter.format(startDate);
     final String endDateText = formatter.format(endDate);
-
+    //update();
     var response = await planningAData.getData(startDateText, endDateText);
     statusRequest = handlingData(response);
     print("********************** $response");
@@ -439,14 +331,43 @@ class PlanningController extends GetxController {
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
         affectation = List<Map<String, dynamic>>.from(response['data']);
-
-        // affectation
-        //     .assignAll(List<Map<String, dynamic>>.from(response['data']));
+        buildDataRowList(affectation);
+        hasAffectations.value = (affectation.isNotEmpty);
       } else {
         statusRequest = StatusRequest.failure;
       }
     }
     update();
-    //buildDataRowList(); // Appeler la méthode
   }
+
+  void onRowsPerPageChanged(int? newRowsPerPage) {
+    rowsPerPage = newRowsPerPage ?? 0;
+    currentPage = 0;
+    buildDataRowList(affectation);
+    //update();
+    print(' vvvvvvvvvvvvvvvvvvvvvvvv $rowsPerPage');
+  }
+}
+
+class MyDataTableSource extends DataTableSource {
+  final PlanningController controller;
+
+  MyDataTableSource(this.controller);
+
+  @override
+  DataRow? getRow(int index) {
+    if (index >= controller.dataRows.length) {
+      return null;
+    }
+    return controller.dataRows[index];
+  }
+
+  @override
+  int get rowCount => controller.dataRows.length;
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get selectedRowCount => 0;
 }

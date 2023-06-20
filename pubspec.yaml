@@ -45,14 +45,18 @@ dependencies:
   flutter_date_pickers: ^0.4.2
   provider: ^5.0.0
   shared_preferences: ^2.1.0
-  path: ^1.8.3
+  
   dartz: ^0.10.1
+  intl: ^0.18.1
   http: ^0.13.6
+  path: ^1.8.3
   drop_down_list: ^0.0.5
   file_picker: ^4.6.1
   image_picker: ^0.8.7+5
   awesome_dialog: ^3.0.2
   lottie: ^2.3.2
+  geolocator: ^7.0.1
+  geocoding: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -79,6 +83,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logoMino.jpg
+    - assets/images/logoFac.png
     - assets/lottie/
   #   - images/a_dot_ham.jpeg
 

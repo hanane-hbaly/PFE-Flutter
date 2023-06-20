@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:my_pfe/core/constant/linkapi.dart';
 
 import '../../../../core/class/crud.dart';
@@ -25,6 +27,20 @@ class GetVendeursData {
       "idv": id,
     });
     print(response);
+    return response.fold((l) => l, (r) => r);
+  }
+
+  getadminbyid(String id) async {
+    var response = await crud.postData(AppLink.getadminById, {
+      "idv": id,
+    });
+    print(response);
+    return response.fold((l) => l, (r) => r);
+  }
+
+  editProfile(String id, [File? file]) async {
+    var response = await crud.addRequestWithImageOne(
+        AppLink.editUsersProfile, {"id": id}, file);
     return response.fold((l) => l, (r) => r);
   }
 }

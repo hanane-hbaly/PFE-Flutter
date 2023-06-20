@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controller/admin_controller/ajouterrespo_controller.dart';
+import '../../../controller/admin_controller/ajouterSecteurController.dart';
 import '../../../core/function/valideInput.dart';
 import '../../widget/auth/custombuttomauth.dart';
 import '../../widget/auth/customtextfromauth.dart';
 
-class AjouterRespo extends StatelessWidget {
-  const AjouterRespo({super.key});
+class AjouterSecteur extends StatelessWidget {
+  const AjouterSecteur({super.key});
 
   @override
   Widget build(BuildContext context) {
-    AjouterAdminController controller = Get.put(AjouterAdminController());
+    AjouterSecteurController controller = Get.put(AjouterSecteurController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green[700],
@@ -24,42 +24,47 @@ class AjouterRespo extends StatelessWidget {
           child: ListView(children: [
             const SizedBox(height: 40),
             const Padding(
-              padding: EdgeInsets.all(15.0),
+              padding: EdgeInsets.all(20),
               child: Center(
                 child: Text(
-                  "Ajouter responsable ",
+                  "Ajouter Secteur",
                   style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                      decorationThickness: 60,
-                      overflow: TextOverflow.clip),
+                    color: Colors.green,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 40),
+            // const Padding(
+            //   padding: EdgeInsets.all(15.0),
+            //   child: Center(
+            //     child: Text(
+            //       "Ajouter Secteur",
+            //       style: TextStyle(
+            //           color: Colors.green,
+            //           fontSize: 30,
+            //           fontWeight: FontWeight.w400,
+            //           decorationThickness: 60,
+            //           overflow: TextOverflow.clip),
+            //     ),
+            //   ),
+            // ),
+            const SizedBox(height: 100),
             CustonTextFormAuth(
               valid: (val) {
-                return validInput(val!, 1, 100, "id");
+                return validInput(val!, 3, 100, "");
               },
-              mycontroller: controller.id,
+              mycontroller: controller.noms,
 
-              // hinttext: " Id",
+              hinttext: " Entrer le nom du secteur",
               iconData: Icons.open_in_full_outlined,
-              labeltext: "Id",
+              labeltext: "Nom",
               // mycontroller: ,
             ),
-            CustonTextFormAuth(
-              valid: (val) {
-                return validInput(val!, 3, 100, "mot de passe");
-              },
-              mycontroller: controller.cin,
-              // hinttext: "mot de passe",
-              iconData: Icons.lock_outline,
-              labeltext: "Mot de passe",
-            ),
+            const SizedBox(height: 100),
             Center(
-              child: Container(
+              child: SizedBox(
                 child: Row(
                   children: [
                     Padding(
@@ -69,7 +74,7 @@ class AjouterRespo extends StatelessWidget {
                         onPressed: () {
                           controller.enregister();
                         },
-                        width: 150,
+                        width: 130,
                       ),
                     ),
                     CustomButtomAuth(
@@ -77,7 +82,7 @@ class AjouterRespo extends StatelessWidget {
                       onPressed: () {
                         controller.annuler();
                       },
-                      width: 120,
+                      width: 130,
                     ),
                   ],
                 ),

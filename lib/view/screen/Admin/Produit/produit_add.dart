@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_pfe/controller/admin_controller/produits/produitA_controller.dart';
 import 'package:my_pfe/core/class/handlingdataview.dart';
-import 'package:my_pfe/core/shared/customtextformglobal.dart';
+import 'package:my_pfe/core/function/valideInput.dart';
 
 import '../../../widget/auth/custombuttomauth.dart';
+import '../../../widget/auth/customtextfromauth.dart';
 
 class ProduitAdd extends StatelessWidget {
   const ProduitAdd({Key? key}) : super(key: key);
@@ -23,82 +24,98 @@ class ProduitAdd extends StatelessWidget {
           statusRequest: controller.statusRequest!,
           widget: Container(
             padding: const EdgeInsets.all(20),
-            child: ListView(
-              children: <Widget>[
-                CustomTextFormGlobal(
-                    hinttext: 'Entrer le nom',
-                    labeltext: 'Nom du produit',
-                    mycontroller: controller.nomp,
-                    iconData: Icons.category),
-                CustomTextFormGlobal(
-                    hinttext: 'Entrer le prix',
-                    labeltext: 'Prix du produit',
-                    mycontroller: controller.prixp,
-                    iconData: Icons.category),
-                ListTile(
-                  title: const Text('Type du produit'),
-                  subtitle: Column(
-                    children: [
-                      RadioListTile<int>(
-                        title: const Text('5'),
-                        value: 5,
-                        groupValue: controller.selectedType,
-                        onChanged: (value) {
-                          controller.setSelectedType(value!);
-                        },
-                      ),
-                      RadioListTile<int>(
-                        title: const Text('10'),
-                        value: 10,
-                        groupValue: controller.selectedType,
-                        onChanged: (value) {
-                          controller.setSelectedType(value!);
-                        },
-                      ),
-                      RadioListTile<int>(
-                        title: const Text('25'),
-                        value: 25,
-                        groupValue: controller.selectedType,
-                        onChanged: (value) {
-                          controller.setSelectedType(value!);
-                        },
-                      ),
-                    ],
+            child: Form(
+              key: controller.formstate,
+              child: ListView(
+                children: <Widget>[
+                  CustonTextFormAuth(
+                      // isNumber: false,
+                      valid: (val) {
+                        return validInput(
+                          val!,
+                          1,
+                          400,
+                          "",
+                        );
+                      },
+                      hinttext: 'Entrer le nom',
+                      labeltext: 'Nom du produit',
+                      mycontroller: controller.nomp,
+                      iconData: Icons.category),
+                  CustonTextFormAuth(
+                      //  isNumber: true,
+                      valid: (val) {
+                        return validInput(val!, 1, 400, "", isNumber: true);
+                      },
+                      hinttext: 'Entrer le prix',
+                      labeltext: 'Prix du produit',
+                      mycontroller: controller.prixp,
+                      iconData: Icons.category),
+                  ListTile(
+                    title: const Text('Type du produit'),
+                    subtitle: Column(
+                      children: [
+                        RadioListTile<int>(
+                          title: const Text('5'),
+                          value: 5,
+                          groupValue: controller.selectedType,
+                          onChanged: (value) {
+                            controller.setSelectedType(value!);
+                          },
+                        ),
+                        RadioListTile<int>(
+                          title: const Text('10'),
+                          value: 10,
+                          groupValue: controller.selectedType,
+                          onChanged: (value) {
+                            controller.setSelectedType(value!);
+                          },
+                        ),
+                        RadioListTile<int>(
+                          title: const Text('25'),
+                          value: 25,
+                          groupValue: controller.selectedType,
+                          onChanged: (value) {
+                            controller.setSelectedType(value!);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                // CustomTextFormGlobal(
-                //     hinttext: 'Entrer le type',
-                //     labeltext: 'Type du produit',
-                //     mycontroller: controller.typep,
-                //     iconData: Icons
-                //         .category), // ici je veut faire au lieu de CustomTextFormGlobal radio button qui contion 3 des choix 5 10 25 comment je peut faire ca
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: MaterialButton(
-                    color: Colors.green[100],
-                    textColor: Colors.green[800],
+                  // CustomTextFormGlobal(
+                  //     hinttext: 'Entrer le type',
+                  //     labeltext: 'Type du produit',
+                  //     mycontroller: controller.typep,
+                  //     iconData: Icons
+                  //         .category),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: MaterialButton(
+                      color: Colors.green[100],
+                      textColor: Colors.green[800],
+                      onPressed: () {
+                        controller.chooseImage();
+                      },
+                      child: const Text('Choisir une image'),
+                    ),
+                  ),
+                  if (controller.file != null)
+                    Image.file(
+                      controller.file!,
+                      width: 200,
+                      height: 200,
+                    ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomButtomAuth(
+                    text: 'Ajouter',
                     onPressed: () {
-                      controller.chooseImage();
+                      controller.addData();
                     },
-                    child: const Text('Choisir une image'),
-                  ), // je veut afficher l'image choisi par l'utilisateur comment je peut faire ca
-                ),
-                if (controller.file != null)
-                  Image.file(
-                    controller.file!,
-                    width: 200,
-                    height: 200,
-                  ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomButtomAuth(
-                  text: 'Ajouter',
-                  onPressed: () {
-                    controller.addData();
-                  },
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

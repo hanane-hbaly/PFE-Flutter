@@ -12,4 +12,7 @@ class AppRoute {
   static const String produitAAdd = "/produitAAdd";
   static const String produitAEdit = "/produitAEdit";
   static const String enregistrerCommande = "/enregistrerCommande";
+  static const String clientRegistrationPage = "/clientRegistrationPage";
+  static const String impressionScreen = "/impressionScreen";
+  static const String ajouterSecteur = "/ajouterSecteur";
 }

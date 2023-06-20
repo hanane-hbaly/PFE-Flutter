@@ -20,8 +20,7 @@ class Crud {
     var response = await http.post(Uri.parse(linkurl), body: data);
     if (response.statusCode == 200 || response.statusCode == 201) {
       Map responsebody = jsonDecode(response.body);
-      // var responsebody = jsonDecode(response.body);
-      // print(" =======@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@CRUD $responsebody");
+      //print(" =======@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@CRUD $responsebody");
 
       return Right(responsebody);
     } else {

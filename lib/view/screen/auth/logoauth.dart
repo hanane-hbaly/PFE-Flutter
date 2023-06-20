@@ -7,10 +7,12 @@ class LogoAuth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         child: Image.asset(
-      AppImageAsset.logo,
+      AppImageAsset.logoFac,
+
       height: 200,
+      // width: 00,
     ));
   }
 }
