@@ -17,9 +17,11 @@ class AppLink {
   static String ajouterV = "$linkServerName/admin/ajouterVendeur.php";
   static String ajouterAdmin = "$linkServerName/admin/ajouterAdmin.php";
   static String ajouterSecteur = "$linkServerName/admin/ajouterSecteur.php";
+  static String affe = "$linkServerName/admin/Affectation.php";
+  static String saveData = "$linkServerName/admin/Savedata.php";
   static String getAllV = "$linkServerName/admin/getAllVendeur.php";
   static String getAllVS = "$linkServerName/admin/getVendeurOnService.php";
-  static String getAllcommandA = "$linkServerName/admin/consultercommande.php";
+  // static String getAllcommandA = "$linkServerName/admin/consultercommande.php";
   static String bloquerV = "$linkServerName/admin/bloquerVendeur.php";
   static String getvendeurById = "$linkServerName/admin/getVendeurById.php";
   static String getadminById = "$linkServerName/admin/getadminById.php";
@@ -45,4 +47,16 @@ class AppLink {
       "$linkServerName/vendeur/enregistrerCommande/insererFacturPrix.php";
   static String inserFacturePrix =
       "$linkServerName/vendeur/enregistrerCommande/insererQantite.php";
+  static String consulterPlaning =
+      "$linkServerName/vendeur/ConsulterPlaning.php";
+  static String consultercommande =
+      "$linkServerName/admin/consultercommande.php";
+
+  static String enregistrerCommandeI =
+      "$linkServerName/vendeur/EnregistrerCommandeI.php";
+
+  static String tonnagevehicule = "$linkServerName/vendeur/tonnagevehicule.php";
+  static String savecommande = "$linkServerName/vendeur/savecommande.php";
+  static String vehiculeid = "$linkServerName/vendeur/vehicule.php";
+  static String infosvend = "$linkServerName/vendeur/infosvendeur.php";
 }

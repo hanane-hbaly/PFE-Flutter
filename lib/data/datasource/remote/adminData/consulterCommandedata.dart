@@ -10,4 +10,10 @@ class ConsulterCommandeData {
     var response = await crud.postData(AppLink.getAllVS, {});
     return response.fold((l) => l, (r) => r);
   }
+
+  getCommandeFac(int? vendeurID, String datee) async {
+    var response = await crud.postData(AppLink.consultercommande,
+        {"vendeurID": vendeurID, "dateSaisie": datee});
+    return response.fold((l) => l, (r) => r);
+  }
 }

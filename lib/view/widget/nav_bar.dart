@@ -55,11 +55,7 @@ class NavBar extends StatelessWidget {
                                 confirm: ElevatedButton(
                                   onPressed: () {
                                     controller.editProfile();
-                                    // if (controller.statusRequest ==
-                                    //     StatusRequest.success) {
-                                    //   // await controller.updateProfileImage(
-                                    //   //     '${controller.admin['imageU']}');
-                                    // }
+
                                     Get.back();
                                   },
                                   child: const Text("Confirmer"),
@@ -126,13 +122,15 @@ class NavBar extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.business, color: Colors.green[800]),
               title: const Text("Affectation des Secteurs"),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(AppRoute.affectationView);
+              },
             ),
             ListTile(
               leading: Icon(Icons.shopping_cart, color: Colors.green[800]),
               title: const Text("consulter commande"),
               onTap: () {
-                Get.toNamed(AppRoute.commandeAView);
+                Get.toNamed(AppRoute.consulterCommandeView);
               },
             ),
             ListTile(
@@ -161,7 +159,9 @@ class NavBar extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.exit_to_app, color: Colors.green[800]),
               title: const Text("Log out"),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(AppRoute.login);
+              },
             ),
           ]),
         ),

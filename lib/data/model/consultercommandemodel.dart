@@ -2,7 +2,7 @@ class ConsulterCommandeModel {
   String? client;
   String? adressec;
   String? produits;
-  int? prixCommande;
+  dynamic prixCommande;
   String? secteur;
   String? vehiculeID;
 
@@ -25,12 +25,12 @@ class ConsulterCommandeModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['client'] = this.client;
-    data['Adressec'] = this.adressec;
-    data['produits'] = this.produits;
-    data['prix_commande'] = this.prixCommande;
-    data['secteur'] = this.secteur;
-    data['VehiculeID'] = this.vehiculeID;
+    data['client'] = client;
+    data['Adressec'] = adressec;
+    data['produits'] = produits;
+    data['prix_commande'] = prixCommande;
+    data['secteur'] = secteur;
+    data['VehiculeID'] = vehiculeID;
     return data;
   }
 }
